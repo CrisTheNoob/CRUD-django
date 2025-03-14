@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-w^gs(pxn2*n6_p9esz&@kv^t*0bys!j9*%=pb1eax#*%*5f@4)'
+SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = 'django-insecure-w^gs(pxn2*n6_p9esz&@kv^t*0bys!j9*%=pb1eax#*%*5f@4)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = ['https://crud-django-9mvj.onrender.com']
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['https://crud-django-9mvj.onrender.com']
 
 
 # Application definition
@@ -80,8 +85,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+database_url = os.environ.get("DATASES_URL")
+DATABASES["default"] = dj_database_url.parse(database_url)
 
-
+# postgresql://crud_django_s7xm_user:EJOJojeDLH0lRFeEUvKyfz5sQGaWNLnr@dpg-cva2bq2j1k6c739du3dg-a.oregon-postgres.render.com/crud_django_s7xm
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
